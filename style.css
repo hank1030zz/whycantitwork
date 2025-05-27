@@ -1,0 +1,283 @@
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: linear-gradient(#fdf6e3, #fce4ec);
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+h1 {
+  font-size: 3em;
+  margin-top: 2rem;
+  color: #d63384;
+}
+
+#start-screen, #map-screen, #game-screen, #leaderboard-screen { /* 加入排行榜畫面 */
+  padding: 2rem;
+}
+
+input[type="text"] {
+  padding: 0.5rem;
+  font-size: 1.2rem;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  margin-top: 1rem;
+}
+
+button {
+  padding: 0.6rem 1.5rem;
+  font-size: 1.2rem;
+  margin-top: 1rem;
+  background-color: #ffb6c1;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  color: #fff;
+  font-weight: bold;
+  transition: background-color 0.3s;
+  margin: 5px; /* 為按鈕增加間距 */
+}
+
+button:hover {
+  background-color: #f06292;
+}
+
+.hidden {
+  display: none;
+}
+
+.map {
+  display: flex; /* 橫向排列關卡 */
+  justify-content: center;
+  align-items: center; /* 垂直置中 */
+  margin-top: 2rem;
+  gap: 1rem; /* 增加關卡之間的間距 */
+}
+
+.level {
+  width: 120px;
+  height: 120px;
+  background-color: #fff0f5;
+  border: 3px solid #f8bbd0;
+  border-radius: 20px;
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.1);
+  font-size: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  transition: transform 0.3s, filter 0.3s;
+  cursor: pointer;
+}
+
+.level:hover {
+  transform: scale(1.05);
+  background-color: #ffe6f0;
+}
+
+/* 🔒 鎖住的關卡 (灰階 + 禁用點擊) */
+.level.locked {
+  filter: grayscale(100%);
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 🔓 解鎖的關卡 (彩色 + 可互動) */
+.level.unlocked {
+  filter: none;
+  pointer-events: auto;
+}
+
+.label {
+  font-size: 1rem;
+  color: #880e4f;
+  margin-top: 0.3rem;
+}
+
+.player-marker {
+  position: absolute;
+  bottom: -40px; /* 調整玩家標記位置 */
+  font-size: 1.2rem;
+  color: #4a148c;
+}
+
+/* 🌉 橋的小徑風格 */
+.path {
+  font-size: 2.5rem; /* 增大橋的圖案 */
+  color: #8b4513; /* 橋的顏色 */
+  user-select: none;
+  margin: 0 10px; /* 調整橋與關卡間的間距 */
+}
+
+/* 題目容器 */
+#questions-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+
+.question-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  background-color: #fff0f5;
+  padding: 10px 20px;
+  border-radius: 10px;
+  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
+  width: fit-content;
+  min-width: 300px; /* 確保題目行有足夠寬度 */
+  justify-content: center;
+}
+
+.question-text {
+  font-size: 1.2em;
+  color: #4a148c;
+  margin-right: 20px;
+}
+
+.drop-target {
+  width: 80px;
+  height: 40px;
+  border: 2px dashed #f48fb1;
+  background-color: #ffe6f0;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1em;
+  color: #ad1457;
+  /* cursor: grab; 不再是可拖曳的源頭，所以移除 grab */
+}
+
+.drop-target.filled {
+    border: 2px solid #880e4f; /* 放置後邊框變實線 */
+}
+
+
+/* 拖曳選項容器 */
+#drag-options-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 30px;
+  padding: 10px;
+  background-color: #fff7fb;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 192, 203, 0.2);
+}
+
+.drag-item {
+  background-color: #ffb6c1;
+  color: #fff;
+  padding: 10px 15px;
+  margin: 8px;
+  border-radius: 8px;
+  cursor: grab;
+  font-weight: bold;
+  font-size: 1.1em;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  transition: transform 0.2s;
+}
+
+.drag-item:hover {
+  transform: translateY(-2px);
+}
+
+/* 排行榜樣式 */
+#leaderboard-screen {
+  margin: 3rem auto;
+  max-width: 600px;
+  background-color: #fff7fb;
+  border: 2px solid #fce4ec;
+  border-radius: 15px;
+  padding: 2rem;
+  box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
+}
+
+#leaderboard-screen h2 {
+  color: #d63384;
+  margin-bottom: 1.5rem;
+}
+
+#leaderboard-list {
+  background-color: #fff0f5;
+  border: 1px solid #f8bbd0;
+  border-radius: 10px;
+  padding: 1rem;
+  min-height: 100px;
+}
+
+#leaderboard-list div {
+  padding: 0.5rem 0;
+  border-bottom: 1px dashed #fce4ec;
+  color: #4a148c;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#leaderboard-list div:last-child {
+  border-bottom: none;
+}
+
+#leaderboard-list .player-rank {
+  font-weight: bold;
+  margin-right: 10px;
+  width: 30px;
+  text-align: right;
+}
+
+#leaderboard-list .player-name {
+  flex-grow: 1;
+  text-align: left;
+}
+
+#leaderboard-list .player-stats {
+  font-size: 0.9em;
+  color: #880e4f;
+}
+
+#knowledge-block {
+  margin: 3rem auto;
+  padding: 2rem;
+  max-width: 800px;
+  background-color: #fff7fb;
+  border: 2px dashed #f48fb1;
+  border-radius: 15px;
+  box-shadow: 0 0 15px rgba(255, 192, 203, 0.3);
+  text-align: left;
+  font-size: 1rem;
+  color: #4a148c;
+}
+
+#knowledge-block h3 {
+  color: #ad1457;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+#knowledge-block ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+#knowledge-block table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  background-color: #fff0f5;
+}
+
+#knowledge-block th, #knowledge-block td {
+  border: 1px solid #f8bbd0;
+  padding: 0.8rem;
+  text-align: left;
+}
+
+#knowledge-block th {
+  background-color: #fce4ec;
+  color: #880e4f;
+}

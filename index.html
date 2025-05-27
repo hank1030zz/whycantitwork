@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>邏輯迷宮：布林運算闖關遊戲</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-database-compat.js"></script>
+</head>
+<body>
+  <div id="start-screen">
+    <h1>邏輯迷宮</h1>
+    <p>請輸入你的名字開始冒險：</p>
+    <input type="text" id="player-name" placeholder="你的名字" />
+    <button onclick="startGame()">開始遊戲</button>
+  </div>
+
+  <div id="map-screen" class="hidden">
+    <h2>你好，<span id="display-name"></span>！選擇關卡開始冒險</h2>
+    <div class="map">
+      <div id="level1" class="level unlocked" onclick="selectLevel(1)">
+        🏠<div class="label">關卡 1：家</div>
+      </div>
+      <div class="path">🌉</div>
+      <div id="level2" class="level locked" onclick="selectLevel(2)">
+        🏪<div class="label">關卡 2：商店</div>
+      </div>
+      <div class="path">🌉</div>
+      <div id="level3" class="level locked" onclick="selectLevel(3)">
+        🏯<div class="label">最終關卡：魔王城堡</div>
+      </div>
+    </div>
+    <button onclick="showLeaderboard()">查看排行榜</button>
+  </div>
+
+  <div id="game-screen" class="hidden">
+    <h2 id="level-title"></h2>
+    <div id="questions-container">
+      </div>
+    <div id="drag-options-container">
+      </div>
+    <button onclick="checkAnswers()">提交答案</button>
+    <button onclick="goBackToMap()">返回地圖</button>
+  </div>
+
+  <div id="leaderboard-screen" class="hidden">
+    <h2>邏輯迷宮排行榜</h2>
+    <div id="leaderboard-list">
+      <p>載入中...</p>
+    </div>
+    <button onclick="goBackToMapFromLeaderboard()">返回地圖</button>
+  </div>
+
+  <div id="knowledge-block">
+    <h3>布林邏輯基礎知識</h3>
+    <p>在布林邏輯中，我們使用以下的符號表示基本運算：</p>
+    <ul>
+        <li><strong>∧</strong> 或 <strong>∩</strong>：邏輯與（AND）或交集</li>
+        <li><strong>∨</strong> 或 <strong>∪</strong>：邏輯或（OR）或聯集</li>
+        <li><strong>¬</strong> 或 <strong>~</strong>：邏輯非（NOT）或補集</li>
+        <li><strong>0</strong>：邏輯假 / 空集</li>
+        <li><strong>1</strong>：邏輯真 / 全集</li>
+    </ul>
+    <p>以下是布林代數中常見的運算律：</p>
+    <table>
+        <thead>
+        <tr>
+            <th>律名</th>
+            <th>表示式</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td>結合律</td><td>(a ∨ b) ∨ c = a ∨ (b ∨ c)<br>(a ∧ b) ∧ c = a ∧ (b ∧ c)</td></tr>
+        <tr><td>交換律</td><td>a ∨ b = b ∨ a<br>a ∧ b = b ∧ a</td></tr>
+        <tr><td>分配律</td><td>a ∧ (b ∨ c) = (a ∧ b) ∨ (a ∧ c)<br>a ∨ (b ∧ c) = (a ∨ b) ∧ (a ∨ c)</td></tr>
+        <tr><td>吸收律</td><td>a ∨ (a ∧ b) = a<br>a ∧ (a ∨ b) = a</td></tr>
+        <tr><td>互補律</td><td>a ∨ ¬a = 1<br>a ∧ ¬a = 0</td></tr>
+        <tr><td>冪等律</td><td>a ∨ a = a<br>a ∧ a = a</td></tr>
+        <tr><td>有界律</td><td>a ∨ 0 = a<br>a ∧ 1 = a</td></tr>
+        </tbody>
+    </table>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
