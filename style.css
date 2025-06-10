@@ -12,7 +12,7 @@ h1 {
   color: #d63384;
 }
 
-#start-screen, #map-screen, #game-screen, #leaderboard-screen { /* 加入排行榜畫面 */
+#start-screen, #map-screen, #game-screen, #leaderboard-screen {
   padding: 2rem;
 }
 
@@ -35,7 +35,7 @@ button {
   color: #fff;
   font-weight: bold;
   transition: background-color 0.3s;
-  margin: 5px; /* 為按鈕增加間距 */
+  margin: 5px;
 }
 
 button:hover {
@@ -47,11 +47,11 @@ button:hover {
 }
 
 .map {
-  display: flex; /* 橫向排列關卡 */
+  display: flex;
   justify-content: center;
-  align-items: center; /* 垂直置中 */
+  align-items: center;
   margin-top: 2rem;
-  gap: 1rem; /* 增加關卡之間的間距 */
+  gap: 1rem;
 }
 
 .level {
@@ -76,14 +76,12 @@ button:hover {
   background-color: #ffe6f0;
 }
 
-/* 🔒 鎖住的關卡 (灰階 + 禁用點擊) */
 .level.locked {
   filter: grayscale(100%);
   cursor: not-allowed;
   pointer-events: none;
 }
 
-/* 🔓 解鎖的關卡 (彩色 + 可互動) */
 .level.unlocked {
   filter: none;
   pointer-events: auto;
@@ -97,25 +95,40 @@ button:hover {
 
 .player-marker {
   position: absolute;
-  bottom: -40px; /* 調整玩家標記位置 */
+  bottom: -40px;
   font-size: 1.2rem;
   color: #4a148c;
 }
 
-/* 🌉 橋的小徑風格 */
 .path {
-  font-size: 2.5rem; /* 增大橋的圖案 */
-  color: #8b4513; /* 橋的顏色 */
+  font-size: 2.5rem;
+  color: #8b4513;
   user-select: none;
-  margin: 0 10px; /* 調整橋與關卡間的間距 */
+  margin: 0 10px;
+}
+
+/* 新增的遊戲內容佈局 */
+#game-content {
+  display: flex;
+  justify-content: center;
+  gap: 30px; /* 題目區和選項區之間的間距 */
+  margin-top: 30px;
+  flex-wrap: wrap; /* 響應式佈局 */
 }
 
 /* 題目容器 */
 #questions-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  margin-top: 30px;
+  align-items: flex-start; /* 左對齊題目 */
+  flex: 1; /* 佔用可用空間 */
+  min-width: 350px; /* 確保題目區有最小寬度 */
+  max-width: 600px;
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #fff7fb;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 192, 203, 0.2);
 }
 
 .question-row {
@@ -123,22 +136,30 @@ button:hover {
   align-items: center;
   margin-bottom: 15px;
   background-color: #fff0f5;
-  padding: 10px 20px;
+  padding: 10px 15px;
   border-radius: 10px;
   box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-  width: fit-content;
-  min-width: 300px; /* 確保題目行有足夠寬度 */
-  justify-content: center;
+  width: 100%; /* 題目行佔滿父容器寬度 */
+  box-sizing: border-box; /* 包含 padding 和 border 在寬度內 */
+  justify-content: space-between; /* 題目和放置區分開兩側 */
 }
 
 .question-text {
   font-size: 1.2em;
   color: #4a148c;
-  margin-right: 20px;
+  margin-right: 15px;
+  flex-grow: 1; /* 讓題目文字佔用更多空間 */
+  text-align: left;
+}
+
+.drop-target-wrapper { /* 新增包裝 drop-target 和 cancel button 的容器 */
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .drop-target {
-  width: 80px;
+  width: 100px; /* 增加放置區寬度 */
   height: 40px;
   border: 2px dashed #f48fb1;
   background-color: #ffe6f0;
@@ -148,24 +169,63 @@ button:hover {
   align-items: center;
   font-size: 1.1em;
   color: #ad1457;
-  /* cursor: grab; 不再是可拖曳的源頭，所以移除 grab */
+  flex-shrink: 0; /* 防止縮小 */
 }
 
 .drop-target.filled {
-    border: 2px solid #880e4f; /* 放置後邊框變實線 */
+    border: 2px solid #880e4f;
+}
+
+.cancel-button { /* 新增取消按鈕樣式 */
+  background-color: #ccc;
+  color: #555;
+  border: none;
+  border-radius: 50%;
+  width: 25px;
+  height: 25px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8em;
+  font-weight: bold;
+  cursor: pointer;
+  visibility: hidden; /* 預設隱藏 */
+  transition: background-color 0.2s;
+  flex-shrink: 0;
+}
+
+.drop-target.filled + .cancel-button { /* 當 drop-target 被填滿時顯示取消按鈕 */
+  visibility: visible;
+}
+
+.cancel-button:hover {
+  background-color: #a0a0a0;
 }
 
 
 /* 拖曳選項容器 */
+#drag-options-wrapper { /* 新增拖曳選項的包裝容器 */
+  flex: 0 0 250px; /* 固定寬度，不放大不縮小 */
+  padding: 15px;
+  background-color: #fff7fb;
+  border-radius: 15px;
+  box-shadow: 0 0 10px rgba(255, 192, 203, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#drag-options-wrapper h3 {
+  color: #d63384;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
 #drag-options-container {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  margin-top: 30px;
-  padding: 10px;
-  background-color: #fff7fb;
-  border-radius: 15px;
-  box-shadow: 0 0 10px rgba(255, 192, 203, 0.2);
+  width: 100%;
 }
 
 .drag-item {
